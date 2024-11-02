@@ -6,7 +6,20 @@
 - Manifest: v2 and v3
 - Contexts: All contexts
 
-This package is very barebones, it does not provide type safety, it just matches received messages to the handlers and is able to receive errors from the handlers. It's been in use by [Refined GitHub](https://github.com/refined-github/refined-github) for a long while.
+Features:
+
+- Promise-based API
+- Avoids message handling boilerplate
+- Suggests a simple messaging pattern
+- Passes errors back to the sender
+
+What it doesn't have:
+
+- Type safety
+- Complexity
+
+It's very barebones and it's been in use by [Refined GitHub](https://github.com/refined-github/refined-github) for a long while.
+
 
 ## Install
 
