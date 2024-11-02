@@ -1,0 +1,85 @@
+{
+	"name": "webext-msg",
+	"version": "0.0.0",
+	"description": "WebExtension module: Simple message handler",
+	"keywords": [
+		"browser",
+		"chrome",
+		"safari",
+		"extension",
+		"web",
+		"background",
+		"window",
+		"content script",
+		"messaging",
+		"communication",
+		"webextension"
+	],
+	"repository": "fregante/webext-msg",
+	"funding": "https://github.com/sponsors/fregante",
+	"license": "MIT",
+	"author": "Federico Brigante <me@fregante.com> (https://fregante.com)",
+	"type": "module",
+	"exports": "./index.js",
+	"types": "./index.d.ts",
+	"files": [
+		"index.js",
+		"index.d.ts"
+	],
+	"scripts": {
+		"build": "tsc",
+		"demo:build": "parcel build --no-cache",
+		"demo:watch": "parcel watch --no-cache --no-hmr",
+		"prepack": "tsc --sourceMap false",
+		"test": "xo && tsc --noEmit",
+		"watch": "tsc --watch"
+	},
+	"xo": {
+		"envs": [
+			"browser",
+			"webextensions"
+		],
+		"rules": {
+			"@typescript-eslint/no-unsafe-return": "off",
+			"@typescript-eslint/no-unsafe-argument": "off",
+			"@typescript-eslint/no-unsafe-assignment": "off"
+		}
+	},
+	"dependencies": {
+		"serialize-error": "^11.0.3"
+	},
+	"devDependencies": {
+		"@parcel/config-webextension": "^2.12.1-canary.3290",
+		"@sindresorhus/tsconfig": "^6.0.0",
+		"@types/chrome": "^0.0.280",
+		"parcel": "^2.0.0-canary.1665",
+		"typescript": "^5.6.3",
+		"xo": "^0.59.3"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"@parcel/resolver-default": {
+		"packageExports": true
+	},
+	"targets": {
+		"main": false,
+		"mv3": {
+			"engines": {
+				"browsers": "last 2 Chrome versions"
+			},
+			"source": "demo/manifest.json",
+			"sourceMap": {
+				"inline": true
+			}
+		}
+	},
+	"webExt": {
+		"sourceDir": "dist",
+		"run": {
+			"startUrl": [
+				"https://example.com"
+			]
+		}
+	}
+}
