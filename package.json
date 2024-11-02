@@ -1,6 +1,6 @@
 {
 	"name": "webext-msg",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "WebExtension module: Simple message handler",
 	"keywords": [
 		"browser",
