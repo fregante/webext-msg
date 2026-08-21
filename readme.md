@@ -110,7 +110,7 @@ An object representing the message. It should contain a key matching a handler r
 
 #### options
 
-Type: `object` (optional)
+Type: `chrome.tabs.SendMessageOptions` (optional)
 
 Options object passed directly to `chrome.tabs.sendMessage`.
 
