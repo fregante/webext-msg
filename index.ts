@@ -1,12 +1,15 @@
 import {serializeError, deserializeError} from 'serialize-error';
 
-/** They must return a promise to mark the message as handled */
+/**
+They must return a promise to mark the message as handled
+*/
 export type MessageHandlers = Record<string, (...arguments_: any[]) => Promise<any>>;
 
 export function handleMessages(handlers: MessageHandlers): void {
+	// eslint-disable-next-line @typescript-eslint/strict-void-return -- Returning `true` is required to keep the message channel open
 	chrome.runtime.onMessage.addListener((message: typeof handlers, sender, sendResponse): true | void => {
 		for (const id of Object.keys(message)) {
-			if (id in handlers) {
+			if (Object.hasOwn(handlers, id)) {
 				(async () => {
 					try {
 						const result = await handlers[id]!(message[id], sender);
@@ -27,7 +30,7 @@ export function handleMessages(handlers: MessageHandlers): void {
 }
 
 function throwIfError(response: any): void {
-	if (response?.$$error) {
+	if (response?.$$error !== undefined) {
 		throw new Error(response.$$error.message, {
 			cause: deserializeError(response.$$error),
 		});
@@ -40,7 +43,7 @@ export async function messageRuntime<Return>(message: Record<string, unknown>): 
 	return response;
 }
 
-export async function messageTab<Return>(...arguments_: Parameters<typeof chrome.tabs.sendMessage>): Promise<Return> {
+export async function messageTab<Return>(...arguments_: [tabId: number, message: unknown, options?: chrome.tabs.MessageSendOptions]): Promise<Return> {
 	const response = await chrome.tabs.sendMessage(...arguments_);
 	throwIfError(response);
 	return response;
