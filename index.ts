@@ -1,50 +1,36 @@
-import {serializeError, deserializeError} from 'serialize-error';
-
 /**
 They must return a promise to mark the message as handled
 */
 export type MessageHandlers = Record<string, (...arguments_: any[]) => Promise<any>>;
 
+async function call(function_: MessageHandlers[string], value: any, sender: chrome.runtime.MessageSender) {
+	try {
+		return await function_(value, sender);
+	} catch (error) {
+		// Throw error in the current context too
+		reportError(error);
+
+		// Reject the promise
+		throw error;
+	}
+}
+
 export function handleMessages(handlers: MessageHandlers): void {
-	// eslint-disable-next-line @typescript-eslint/strict-void-return -- Returning `true` is required to keep the message channel open
-	chrome.runtime.onMessage.addListener((message: typeof handlers, sender, sendResponse): true | void => {
-		for (const id of Object.keys(message)) {
+	// eslint-disable-next-line @typescript-eslint/strict-void-return -- Incorrect types
+	chrome.runtime.onMessage.addListener((message: typeof handlers, sender): Promise<any> | void => {
+		for (const [id, value] of Object.entries(message)) {
 			if (Object.hasOwn(handlers, id)) {
-				(async () => {
-					try {
-						const result = await handlers[id]!(message[id], sender);
-						sendResponse(result);
-					} catch (error) {
-						sendResponse({$$error: serializeError(error)});
-
-						// Throw error in the current context too
-						throw error;
-					}
-				})();
-
-				// Chrome does not support returning a promise
-				return true;
+				// Call this way because the response MUST be a promise, even if the handler is synchronous
+				return call(handlers[id]!, value, sender);
 			}
 		}
 	});
 }
 
-function throwIfError(response: any): void {
-	if (response?.$$error !== undefined) {
-		throw new Error(response.$$error.message, {
-			cause: deserializeError(response.$$error),
-		});
-	}
-}
-
 export async function messageRuntime<Return>(message: Record<string, unknown>): Promise<Return> {
-	const response = await chrome.runtime.sendMessage(message);
-	throwIfError(response);
-	return response;
+	return chrome.runtime.sendMessage(message);
 }
 
 export async function messageTab<Return>(...arguments_: [tabId: number, message: unknown, options?: chrome.tabs.MessageSendOptions]): Promise<Return> {
-	const response = await chrome.tabs.sendMessage(...arguments_);
-	throwIfError(response);
-	return response;
+	return chrome.tabs.sendMessage(...arguments_);
 }

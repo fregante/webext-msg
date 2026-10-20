@@ -9,12 +9,25 @@ handleMessages({
 
 let clickCounter = 0;
 document.addEventListener('click', async event => {
-	if (clickCounter++ % 3) {
-		console.log(
-			'Background page says:',
-			await messageRuntime({click: {clientX: event.clientX, clientY: event.clientY, url: location.href}}),
-		);
-	} else {
-		await messageRuntime({throwError: 'Test error every 3 clicks'});
+	switch (clickCounter++ % 3) {
+		case 0: {
+			console.log(
+				'Background page says asyncronously:',
+				await messageRuntime({click: {clientX: event.clientX, clientY: event.clientY, url: location.href}}),
+			);
+			break;
+		}
+
+		case 1: {
+			await messageRuntime({throwError: 'Test error every 3 clicks'});
+			break;
+		}
+
+		default: {
+			console.log(
+				'Background page says synchronously:',
+				await messageRuntime({sync: 'Test sync every 3 clicks'}));
+			break;
+		}
 	}
 });
