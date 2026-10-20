@@ -2,11 +2,18 @@ import {handleMessages, messageTab} from 'webext-msg';
 
 handleMessages({
 	async click({clientX, clientY, url}, sender) {
+		await new Promise(resolve => {
+			setTimeout(resolve, 500);
+		});
 		console.log('click', {clientX, clientY, url}, sender);
 		return 'Click received at time ' + new Date().toString();
 	},
 	async throwError() {
 		throw new Error('This is a test error');
+	},
+	sync(message) {
+		console.log('sync', message);
+		return 'Sync response' + message;
 	},
 });
 

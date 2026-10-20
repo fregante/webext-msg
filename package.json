@@ -40,9 +40,6 @@
 		"communication",
 		"webextension"
 	],
-	"dependencies": {
-		"serialize-error": "^13.0.2"
-	},
 	"devDependencies": {
 		"@parcel/config-webextension": "^2.16.4",
 		"@sindresorhus/tsconfig": "^8.1.0",
