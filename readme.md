@@ -62,6 +62,58 @@ await messageRuntime({throwError: null}); // This will throw an error in the cur
 messageTab(tabId, {alert: 'The background sends their regards'});
 ```
 
+## API
+
+### handleMessages(handlers)
+
+Registers message handlers that listen to incoming messages from content scripts or extension pages.
+
+#### handlers
+
+Type: `Record<string, (messageValue: any, sender: chrome.runtime.MessageSender) => Promise<any>>`
+
+An object of handler functions. Each key in the object is the message identifier, and the value is an `async` function (or a function returning a `Promise`) that receives:
+- `messageValue`: The value sent under that key (e.g., `VALUE` in `{openTab: VALUE}`).
+- `sender`: A `chrome.runtime.MessageSender` object.
+
+Only the first matching key in the received message will trigger its handler. If a handler throws an error, the error is serialized and re-thrown on the sending side.
+
+### messageRuntime(message)
+
+Sends a message to the background script or other extension pages via `chrome.runtime.sendMessage`.
+
+Returns a `Promise` resolving to the response from the handler. If the handler throws an error, this promise will reject with that error.
+
+#### message
+
+Type: `Record<string, unknown>`
+
+An object representing the message. It should contain a key matching a handler registered with `handleMessages`.
+
+### messageTab(tabId, message, options?)
+
+Sends a message to a specific tab or content script via `chrome.tabs.sendMessage`.
+
+Returns a `Promise` resolving to the response from the handler. If the handler throws an error, this promise will reject with that error.
+
+#### tabId
+
+Type: `number`
+
+The ID of the tab to send the message to.
+
+#### message
+
+Type: `Record<string, unknown>`
+
+An object representing the message. It should contain a key matching a handler registered with `handleMessages`.
+
+#### options
+
+Type: `chrome.tabs.SendMessageOptions` (optional)
+
+Options object passed directly to `chrome.tabs.sendMessage`.
+
 ## Related
 
 - [Awesome-WebExtensions](https://github.com/fregante/Awesome-WebExtensions) - A curated list of awesome resources for WebExtensions development.
