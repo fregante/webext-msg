@@ -2,9 +2,10 @@
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
 		"outDir": ".",
-		"types": ["chrome"]
+		"types": ["chrome", "node"]
 	},
 	"files": [
-		"index.ts"
+		"index.ts",
+		"index.test.ts"
 	]
 }

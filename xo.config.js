@@ -8,6 +8,13 @@ const xoConfig = [
 		ignores: ['demo/package.json'],
 	},
 	{
+		files: ['index.test.ts'],
+		rules: {
+			// `node:test` registers tests synchronously and returns promises
+			'@typescript-eslint/no-floating-promises': 'off',
+		},
+	},
+	{
 		languageOptions: {
 			globals: {
 				...globals.browser,
