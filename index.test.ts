@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions -- Test mocks need assertions */
 import {describe, it, type TestContext} from 'node:test';
-import {handleMessages, messageRuntime, messageTab} from './index.js';
+import {handleMessages, messageRuntime, messageTab} from './index.ts';
 
 type Listener = (message: Record<string, unknown>, sender: chrome.runtime.MessageSender) => Promise<unknown> | undefined;
 

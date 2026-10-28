@@ -21,7 +21,7 @@
 		"demo:watch": "parcel watch --no-cache --no-hmr",
 		"prepack": "tsc --sourceMap false",
 		"test": "xo && npm run test:unit",
-		"test:unit": "tsc && node --test index.test.js",
+		"test:unit": "tsc --noEmit && node --test",
 		"watch": "tsc --watch"
 	},
 	"files": [
