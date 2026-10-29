@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises -- `node:test` returns promises, fixed in a later xo */
 /* eslint-disable @typescript-eslint/consistent-type-assertions -- Test mocks need assertions */
 import {describe, it, type TestContext} from 'node:test';
 import {handleMessages, messageRuntime, messageTab} from './index.ts';
